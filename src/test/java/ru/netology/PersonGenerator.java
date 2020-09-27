@@ -15,16 +15,31 @@ public class PersonGenerator {
     private String login;
     private String password;
     private String status;
+    private String locale;
 
-    public PersonGenerator(String locale, boolean passwordType, boolean statusType) {
+    public PersonGenerator(String locale) {
+        this.locale = locale;
+    }
+
+    public void generatePersonWithValidPassword(){
         Faker faker = new Faker(new Locale(locale));
         login = faker.name().username();
-        if (passwordType) {
-            password = getValidPassword();
-        } else {
-            password = getInvalidPassword();
-        }
-        status = getStatus(statusType);
+        password = getValidPassword();
+        status = getActiveStatus();
+    }
+
+    public void generatePersonWithInvalidPassword(){
+        Faker faker = new Faker(new Locale(locale));
+        login = faker.name().username();
+        password = getInvalidPassword();
+        status = getActiveStatus();
+    }
+
+    public void generatePersonWithBlockedStatus(){
+        Faker faker = new Faker(new Locale(locale));
+        login = faker.name().username();
+        password = getValidPassword();
+        status = getBlockedStatus();
     }
 
     private String getValidPassword() {
@@ -40,12 +55,12 @@ public class PersonGenerator {
         return passwords.get(rndLetters.nextInt(passwords.size() - 1));
     }
 
-    private String getStatus(boolean statusType) {
-        if (statusType) {
+    private String getActiveStatus() {
             return "active";
-        } else {
+    }
+
+    private String getBlockedStatus() {
             return "blocked";
-        }
     }
 }
 
